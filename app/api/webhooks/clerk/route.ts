@@ -37,7 +37,6 @@ export async function POST(req: Request) {
     return new Response('Error occurred', { status: 400 })
   }
 
-  // Handle user created event
   if (evt.type === 'user.created') {
     const { id, email_addresses, first_name } = evt.data
 
@@ -46,16 +45,6 @@ export async function POST(req: Request) {
       email: email_addresses[0]?.email_address,
       name: first_name || 'User',
     })
-  }
-
-  // Handle user updated event
-  if (evt.type === 'user.updated') {
-    const { id, email_addresses, first_name } = evt.data
-
-    await supabase.from('users').update({
-      email: email_addresses[0]?.email_address,
-      name: first_name || 'User',
-    }).eq('clerk_id', id)
   }
 
   return new Response('Webhook processed', { status: 200 })
